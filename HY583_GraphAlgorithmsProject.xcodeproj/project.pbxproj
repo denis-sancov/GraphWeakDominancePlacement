@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D742BAC01CD81BB200882B22 /* NodeLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D742BABE1CD81BB200882B22 /* NodeLevel.cpp */; };
+		D732B8721D13F8780082C069 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7F2861E1CD1B21900BC237C /* main.cpp */; };
 		D795DBFB1CE361960008AB86 /* Edge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D795DBF91CE361960008AB86 /* Edge.cpp */; };
-		D7F2861F1CD1B21900BC237C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7F2861E1CD1B21900BC237C /* main.cpp */; };
 		D7F286281CD1B22600BC237C /* Graph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7F286261CD1B22600BC237C /* Graph.cpp */; };
 		D7F2862E1CD1B2AD00BC237C /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7F2862C1CD1B2AD00BC237C /* Node.cpp */; };
 		D7F286311CD1B38B00BC237C /* GraphAlgorithms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7F2862F1CD1B38B00BC237C /* GraphAlgorithms.cpp */; };
@@ -28,8 +27,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D742BABE1CD81BB200882B22 /* NodeLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NodeLevel.cpp; sourceTree = "<group>"; };
-		D742BABF1CD81BB200882B22 /* NodeLevel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NodeLevel.hpp; sourceTree = "<group>"; };
+		D72791751D14253B00C019D2 /* defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = defines.h; sourceTree = "<group>"; };
 		D795DBF91CE361960008AB86 /* Edge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Edge.cpp; sourceTree = "<group>"; };
 		D795DBFA1CE361960008AB86 /* Edge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Edge.hpp; sourceTree = "<group>"; };
 		D7F2861B1CD1B21900BC237C /* HY583_GraphAlgorithmsProject */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HY583_GraphAlgorithmsProject; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,10 +81,9 @@
 		D7F286251CD1B21C00BC237C /* Graph */ = {
 			isa = PBXGroup;
 			children = (
+				D72791751D14253B00C019D2 /* defines.h */,
 				D7F286271CD1B22600BC237C /* Graph.hpp */,
 				D7F286261CD1B22600BC237C /* Graph.cpp */,
-				D742BABF1CD81BB200882B22 /* NodeLevel.hpp */,
-				D742BABE1CD81BB200882B22 /* NodeLevel.cpp */,
 				D7F2862D1CD1B2AD00BC237C /* Node.hpp */,
 				D7F2862C1CD1B2AD00BC237C /* Node.cpp */,
 				D795DBFA1CE361960008AB86 /* Edge.hpp */,
@@ -153,9 +150,8 @@
 			files = (
 				D795DBFB1CE361960008AB86 /* Edge.cpp in Sources */,
 				D7F286311CD1B38B00BC237C /* GraphAlgorithms.cpp in Sources */,
-				D742BAC01CD81BB200882B22 /* NodeLevel.cpp in Sources */,
 				D7F286281CD1B22600BC237C /* Graph.cpp in Sources */,
-				D7F2861F1CD1B21900BC237C /* main.cpp in Sources */,
+				D732B8721D13F8780082C069 /* main.cpp in Sources */,
 				D7F2862E1CD1B2AD00BC237C /* Node.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

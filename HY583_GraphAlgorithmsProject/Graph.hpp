@@ -12,29 +12,23 @@
 #include <vector>
 #include "Node.hpp"
 
+
 class Graph {
-    std::vector<Node *> _nodes;
-public:
-    Graph(unsigned long nodes_count);
-//    Graph(const Graph& graph) {
-//        _nodes.reserve(graph._nodes.size());
-//        for (Node *node : graph._nodes) {
-//             Node *node_copy = new Node(*node);
-//            _nodes.push_back(node_copy);
-//        }
-//    }
-    const std::vector<Node *> nodes() {
+    std::vector<node_ptr_strong> _nodes;
+public:    
+    Graph(unsigned long nodes_count, unsigned short edge_density);
+        
+    const std::vector<node_ptr_strong> nodes() {
         return _nodes;
     }
     
-    void addEdge(Node *from, Node *to);
+    void addEdge(node_ptr_strong from, node_ptr_strong to);
     
-    void markNodeAsRemoved(Node *node);
+    void markNodeAsRemoved(node_ptr_strong node);
     
     void resetRemoveMarks();
     
     void debug();
-
  };
 
 #endif /* Graph_hpp */

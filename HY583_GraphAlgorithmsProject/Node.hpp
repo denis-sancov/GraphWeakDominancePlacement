@@ -13,18 +13,17 @@
 #include <vector>
 #include "Edge.hpp"
 
-
 class Node {
 
 public:
     bool removed;
-    const std::string *value;
-    std::vector<Edge *> out_edges;
-    std::vector<Edge *> in_edges;
+    unsigned int value;
+    std::vector<edge_ptr_strong> out_edges;
+    std::vector<edge_ptr_strong> in_edges;
 
     unsigned long in_degree() {
         unsigned long tmp = 0;
-        for (Edge *edge : in_edges) {
+        for (edge_ptr_strong edge : in_edges) {
             if (edge->removed == false) {
                 tmp += 1;
             }
@@ -34,7 +33,7 @@ public:
     
     unsigned long out_degree() {
         unsigned long tmp = 0;
-        for (Edge *edge : out_edges) {
+        for (edge_ptr_strong edge : out_edges) {
             if (edge->removed == false) {
                 tmp += 1;
             }
@@ -43,16 +42,16 @@ public:
     }
 
     void resetRemovedMarks() {
-        for (Edge *edge : in_edges) {
+        for (edge_ptr_strong edge : in_edges) {
             edge->removed = false;
         }
-        for (Edge *edge : out_edges) {
+        for (edge_ptr_strong edge : out_edges) {
             edge->removed = false;
         }
     }
     
-    
-    Node(std::string value);   
+    Node(unsigned int value);
     void debug();
+    
 };
 #endif /* Node_hpp */
