@@ -10,12 +10,13 @@
 #include <stack>
 #include <iostream>
 #include <algorithm>
+#include <unordered_map>
 
 using namespace std;
 
 #pragma mark <BFS to find a path between two nodes>
 
-bool is_there_is_a_path_from(node_ptr_strong from, node_ptr_strong to, Graph &graph) {
+bool _is_there_is_a_path_from(node_ptr_strong from, node_ptr_strong to, Graph &graph) {
     if (from->value > to->value) {
         return false;
     }
@@ -86,80 +87,63 @@ vector<node_ptr_strong> topological_sort_using_kanhs_algorithm(Graph &graph) {
 
 #pragma mark <Topological sort using local search>
 
+typedef unordered_multimap<node_ptr_strong, node_ptr_strong> FipsMultimap;
+
+bool _perform_swipe(unsigned long from, unsigned long to,
+                    std::vector<node_ptr_strong> &topological_sort,
+                    FipsMultimap &fipsMultimap) {
+    
+    node_ptr_strong fromNode = topological_sort.at(from);
+    node_ptr_strong toNode = topological_sort.at(to);
+    
+    pair<FipsMultimap::iterator, FipsMultimap::iterator> iterpair = fipsMultimap.equal_range(fromNode);
+    
+    FipsMultimap::iterator it = iterpair.first;
+    for (; it != iterpair.second; ++it) {
+        if (it->second->value == toNode->value) {
+            fipsMultimap.erase(it);
+            iter_swap(topological_sort.begin() + (long)from, topological_sort.begin() + (long)to);
+            return true;
+        }
+    }
+    return false;
+}
+
 std::vector<node_ptr_strong> topological_sort_using_local_search(Graph &graph, vector<node_ptr_strong> &t1) {
-   // cout << "Performing  topological sort using local search approach" << endl;
     vector<node_ptr_strong> topological_sort(t1);
     unsigned long size = t1.size();
     
-    bool **fipsMatrix = new bool*[size];
-    for(unsigned long i = 0; i < size; i++) {
-        fipsMatrix[i] = new bool[size];
-    }
+    FipsMultimap fipsMultimap;
     
     for (unsigned long i = 0; i < size - 1; i++) {
         for (unsigned long j = i + 1; j < size; j++) {
-            bool status = is_there_is_a_path_from(t1.at(i), t1.at(j), graph);
-            fipsMatrix[i][j] = (status == false && i < j);
+            node_ptr_strong from = t1.at(i);
+            node_ptr_strong to = t1.at(j);
+            if (_is_there_is_a_path_from(from, to, graph) == false && i < j) {
+                fipsMultimap.insert(pair<node_ptr_strong, node_ptr_strong>(from, to));
+            }
         }
     }
 
-    unsigned long i = 0;
-    unsigned long j = 1;
-    bool reversedIteration = false;
     bool swipe_available = true;
-
-    unsigned long originalI = 0;
-    unsigned long originalJ = 0;
-
     
     while (swipe_available) {
-        
+        swipe_available = false;
+
+        for (unsigned long i = 0; i < size-1; i++) {
+            if (_perform_swipe(i, i+1, topological_sort, fipsMultimap)) {
+                swipe_available = true;
+            }
+        }
+    
+        for (unsigned long i = size-1; i > 0; i--) {
+            if (_perform_swipe(i, i-1, topological_sort, fipsMultimap)) {
+                swipe_available = true;
+            }
+        }
     }
     
-//
-//    bool swipe_was_performed_on_iteration = 0;
-//    unsigned long reverse = false;
-//    while (1) {
-//        t1i = find(t1.begin(), t1.end(), topological_sort.at(i)) - t1.begin();
-//        t1j = find(t1.begin(), t1.end(), topological_sort.at(j)) - t1.begin();
-//        if (fipsMatrix[t1i][t1j] == 1 || fipsMatrix[t1j][t1i] == 1) {
-//            fipsMatrix[t1i][t1j] = 0;
-//            fipsMatrix[t1j][t1i] = 0;
-//            
-//            iter_swap(topological_sort.begin() + i, topological_sort.begin() + j);
-//            swipe_was_performed_on_iteration = true;
-//        }
-//        
-//        if (j == 0 && reverse == true) {
-//            i = 0;
-//            j = i + 1;
-//            reverse = false;
-//            if (swipe_was_performed_on_iteration == false) {
-//                break;
-//            }
-//            swipe_was_performed_on_iteration = false;
-//            continue;
-//        } else if (j == (size-1) && reverse == false) {
-//            i = (size-1);
-//            j = i - 1;
-//            reverse = true;
-//            if (swipe_was_performed_on_iteration == false) {
-//                break;
-//            }
-//            swipe_was_performed_on_iteration = false;
-//            continue;
-//        }
-//
-//        if (reverse == false) {
-//            i++;
-//            j = i + 1;
-//        } else {
-//            i--;
-//            j = i - 1;
-//        }
-//    }
-    
-    delete[] fipsMatrix;
+    fipsMultimap.clear();
     
 //    cout << "Topological sort using Local search approach was performed" << endl;
 //    for (node_ptr_strong node : topological_sort) {
@@ -172,8 +156,8 @@ std::vector<node_ptr_strong> topological_sort_using_local_search(Graph &graph, v
 #pragma mark <Topological sort using Max rank>
 
 node_ptr_strong _node_with_max_rank(vector<node_ptr_strong> &nodes, vector<node_ptr_strong> &t1) {
-    unsigned long max_rank = 0;
-    unsigned long rank = 0;
+    long max_rank = 0;
+    long rank = 0;
     for (node_ptr_strong node : nodes) {
         if (node->removed == true) {
             continue;
@@ -185,7 +169,7 @@ node_ptr_strong _node_with_max_rank(vector<node_ptr_strong> &nodes, vector<node_
             }
         }  
     }
-    return t1.at(max_rank);
+    return t1.at((unsigned long)max_rank);
 }
 
 std::vector<node_ptr_strong> topological_sort_using_max_rank(Graph &graph, std::vector<node_ptr_strong> &t1) {
@@ -203,11 +187,13 @@ std::vector<node_ptr_strong> topological_sort_using_max_rank(Graph &graph, std::
     }
     graph.resetRemoveMarks();
     
-//    cout << "Topological sort using Max Rank approach was performed" << endl;
+//    cout << "Topological sort using Max rank" << endl;
 //    for (node_ptr_strong node : topological_sort) {
 //        cout << node->value << " ";
 //    }
 //    cout << endl;
+
+    
     return topological_sort;
 }
 
@@ -236,12 +222,12 @@ unsigned long topological_sort_number_of_fips(Graph &graph, std::vector<node_ptr
     unsigned long number_of_fips = 0;
     for (unsigned long i = 0; i < size; i++) {
         for (unsigned long j = (i+1); j < size; j++) {
-            unsigned long i_in_t2 = find(t2.begin(), t2.end(), t1.at(i)) - t2.begin();
+            long i_in_t2 = find(t2.begin(), t2.end(), t1.at(i)) - t2.begin();
             
-            unsigned long j_in_t2 = find(t2.begin(), t2.end(), t1.at(j)) - t2.begin();
+            long j_in_t2 = find(t2.begin(), t2.end(), t1.at(j)) - t2.begin();
             
             if (i <= j && i_in_t2 <= j_in_t2) {
-                if (is_there_is_a_path_from(t1.at(i), t1.at(j), graph) == false) {
+                if (_is_there_is_a_path_from(t1.at(i), t1.at(j), graph) == false) {
                     number_of_fips += 1;
                 }
             }

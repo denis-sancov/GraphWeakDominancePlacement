@@ -12,27 +12,56 @@
 #include <cmath>
 
 Graph::Graph(unsigned long nodes_count, unsigned short edge_density) {
+    //test graph
 //    node_ptr_strong a(new Node(0));
 //    node_ptr_strong b(new Node(1));
 //    node_ptr_strong c(new Node(2));
 //    node_ptr_strong d(new Node(3));
 //    node_ptr_strong e(new Node(4));
 //    node_ptr_strong f(new Node(5));
+//    node_ptr_strong g(new Node(6));
+//    node_ptr_strong h(new Node(7));
+//    node_ptr_strong i(new Node(8));
+//    node_ptr_strong j(new Node(9));
+//    node_ptr_strong k(new Node(10));
 //    
+//    _nodes.push_back(c);
 //    _nodes.push_back(a);
 //    _nodes.push_back(b);
-//    _nodes.push_back(c);
 //    _nodes.push_back(d);
 //    _nodes.push_back(e);
 //    _nodes.push_back(f);
-//
+//    _nodes.push_back(g);
+//    _nodes.push_back(h);
+//    _nodes.push_back(i);
+//    _nodes.push_back(j);
+//    _nodes.push_back(k);
+//    
+//   
+//    addEdge(a, b);
+//    addEdge(a, c);
 //    addEdge(a, d);
-//    addEdge(a, e);
-//    addEdge(b, d);
+//    
+//    addEdge(b, e);
 //    addEdge(b, f);
-//    addEdge(c, e);
+//    
 //    addEdge(c, f);
-    
+//    addEdge(c, g);
+//
+//    addEdge(d, g);
+//    
+//    addEdge(e, h);
+//    addEdge(e, i);
+//    
+//    addEdge(f, i);
+//    
+//    addEdge(g, i);
+//    addEdge(g, j);
+//    
+//    addEdge(h, k);
+//    addEdge(i, k);
+//    addEdge(j, k);
+
     
     _nodes.reserve(nodes_count);
     for (unsigned int i = 0; i < nodes_count; i++) {

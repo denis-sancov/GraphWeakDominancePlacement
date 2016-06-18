@@ -12,52 +12,57 @@
 #include <thread>
 #include <mutex>
 
+
 typedef struct _result {
     unsigned long local_search_fips;
     unsigned long max_rank_fips;
 } Result;
 
-std::mutex mtx;
-
+std::mutex *mtx;
+unsigned long amount_of_graphs = 0;
+unsigned long completed_graphs = 0;
 
 void graph_thread(unsigned long amount_of_graphs_to_generate, std::vector<Result> *results) {
-    mtx.lock();
-    std::cout << "enter thread = " << std::this_thread::get_id() << std::endl;
-    mtx.unlock();
-    
     Result resultStruct;
     resultStruct.local_search_fips = 0;
     resultStruct.max_rank_fips = 0;
     for (unsigned long i = 0; i < amount_of_graphs_to_generate; i++) {
-        Graph graph = Graph(1000, 2);
-        if (graph.nodes().size() == 0) {
-            std::cout << "Graph is empty" << std::endl;
-            return;
-        }
+        Graph graph = Graph(800, 10);
+        
         std::vector<node_ptr_strong> t1 = topological_sort_using_kanhs_algorithm(graph);
-     //   std::vector<node_ptr_strong> local_search_topological_sort = topological_sort_using_local_search(graph, t1);
-//        resultStruct.local_search_fips += topological_sort_number_of_fips(&graph, t1, local_search_topological_sort);
-   ///     local_search_topological_sort.clear();
+        
+        std::vector<node_ptr_strong> local_search_topological_sort = topological_sort_using_local_search(graph, t1);
+        resultStruct.local_search_fips += topological_sort_number_of_fips(graph, t1, local_search_topological_sort);
+        local_search_topological_sort.clear();
 
         std::vector<node_ptr_strong> max_rank_topological_sort = topological_sort_using_max_rank(graph, t1);
-        resultStruct.max_rank_fips = topological_sort_number_of_fips(graph, t1, max_rank_topological_sort);
+        resultStruct.max_rank_fips += topological_sort_number_of_fips(graph, t1, max_rank_topological_sort);
         max_rank_topological_sort.clear();
         
         t1.clear();
         
-        mtx.lock();
-        std::cout << "Done with Graph" << std::endl;
-        mtx.unlock();
+        mtx->lock();
+        
+        completed_graphs += 1;
+        
+        std::cout << completed_graphs << " of " << amount_of_graphs << std::endl;
+        
+        mtx->unlock();
     }
     results->push_back(resultStruct);
 }
 
-int main(int argc, const char * argv[]) {
-    unsigned long amount_of_graphs = 100;
 
+
+int main(int argc, const char * argv[]) {
+    
+    mtx = new std::mutex();
+    
+    amount_of_graphs = 100;
+    
     std::vector<Result> results;
     results.reserve(amount_of_graphs);
-    
+
     std::vector<std::thread> threads;
     
     unsigned long threads_count = std::thread::hardware_concurrency();
@@ -66,14 +71,14 @@ int main(int argc, const char * argv[]) {
     }
     unsigned long amount_of_graphs_per_thread = amount_of_graphs / threads_count;
 
+    std::cout << "Progress: " << std::endl;
     for (unsigned long i = 0; i < threads_count; i++) {
         threads.push_back(std::thread(graph_thread, amount_of_graphs_per_thread, &results));
     }
-
     for (auto& th : threads) {
         th.join();
     }
-
+    
     unsigned long total_fips_local_search = 0;
     unsigned long total_fips_max_rank = 0;
     
@@ -86,6 +91,7 @@ int main(int argc, const char * argv[]) {
     std::cout << "local search = " << total_fips_local_search / amount_of_graphs << std::endl;
     std::cout << "max rank = " << total_fips_max_rank / amount_of_graphs << std::endl;
 
+    delete mtx;
     
     return 0;
 }

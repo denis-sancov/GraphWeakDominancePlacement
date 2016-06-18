@@ -50,7 +50,7 @@ public:
         }
     }
     
-    Node(unsigned int value);
+    Node(unsigned int node_value);
     void debug();
     
 };

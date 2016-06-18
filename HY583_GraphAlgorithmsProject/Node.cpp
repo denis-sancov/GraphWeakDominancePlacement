@@ -9,8 +9,8 @@
 #include "Node.hpp"
 #include <iostream>
 
-Node::Node(unsigned int value) {
-    this->value = value;
+Node::Node(unsigned int node_value) {
+    this->value = node_value;
 }
 
 void Node::debug() {

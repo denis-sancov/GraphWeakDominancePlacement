@@ -16,7 +16,7 @@ class Edge {
 public:
     node_ptr_weak from, to;
     bool removed;
-    Edge(node_ptr_strong from, node_ptr_strong to);
+    Edge(node_ptr_strong from_node, node_ptr_strong to_node);
 };
 
 #endif /* Edge_hpp */

@@ -9,8 +9,8 @@
 #include "Edge.hpp"
 #include "Node.hpp"
 
-Edge::Edge(node_ptr_strong from, node_ptr_strong to) {
+Edge::Edge(node_ptr_strong from_node, node_ptr_strong to_node) {
     this->removed = false;
-    this->from = from;
-    this->to = to;
+    this->from = from_node;
+    this->to = to_node;
 }
