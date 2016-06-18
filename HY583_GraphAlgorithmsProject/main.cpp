@@ -12,6 +12,10 @@
 #include <thread>
 #include <mutex>
 
+static unsigned long amount_of_graphs = 100;
+static unsigned long amount_of_nodes = 100;
+static unsigned short edge_density = 10;
+
 
 typedef struct _result {
     unsigned long local_search_fips;
@@ -19,7 +23,6 @@ typedef struct _result {
 } Result;
 
 std::mutex *mtx;
-unsigned long amount_of_graphs = 0;
 unsigned long completed_graphs = 0;
 
 void graph_thread(unsigned long amount_of_graphs_to_generate, std::vector<Result> *results) {
@@ -27,7 +30,7 @@ void graph_thread(unsigned long amount_of_graphs_to_generate, std::vector<Result
     resultStruct.local_search_fips = 0;
     resultStruct.max_rank_fips = 0;
     for (unsigned long i = 0; i < amount_of_graphs_to_generate; i++) {
-        Graph graph = Graph(800, 10);
+        Graph graph = Graph(amount_of_nodes, edge_density);
         
         std::vector<node_ptr_strong> t1 = topological_sort_using_kanhs_algorithm(graph);
         
@@ -57,8 +60,6 @@ void graph_thread(unsigned long amount_of_graphs_to_generate, std::vector<Result
 int main(int argc, const char * argv[]) {
     
     mtx = new std::mutex();
-    
-    amount_of_graphs = 100;
     
     std::vector<Result> results;
     results.reserve(amount_of_graphs);
