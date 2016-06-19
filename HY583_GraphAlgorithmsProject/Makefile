@@ -1,6 +1,6 @@
 CXX = g++
 
-CXXFLAGS = -Os -Wall -std=c++11
+CXXFLAGS = -Os -Wall -std=c++11 -Wparentheses -pthread
 
 SRCS = Edge.cpp Node.cpp Graph.cpp main.cpp GraphAlgorithms.cpp
 
