@@ -58,44 +58,40 @@ void graph_thread(unsigned long amount_of_graphs_to_generate, std::vector<Result
 
 
 int main(int argc, const char * argv[]) {
+    mtx = new std::mutex();
     
-    
-    Graph graph = Graph(100000000, 2);
+    std::vector<Result> results;
+    results.reserve(amount_of_graphs);
 
-//    mtx = new std::mutex();
-//    
-//    std::vector<Result> results;
-//    results.reserve(amount_of_graphs);
-//
-//    std::vector<std::thread> threads;
-//    
-//    unsigned long threads_count = std::thread::hardware_concurrency();
-//    if (threads_count == 0) {
-//        threads_count = 2;
-//    }
-//    unsigned long amount_of_graphs_per_thread = amount_of_graphs / threads_count;
-//
-//    std::cout << "Progress: " << std::endl;
-//    for (unsigned long i = 0; i < threads_count; i++) {
-//        threads.push_back(std::thread(graph_thread, amount_of_graphs_per_thread, &results));
-//    }
-//    for (auto& th : threads) {
-//        th.join();
-//    }
-//    
-//    unsigned long total_fips_local_search = 0;
-//    unsigned long total_fips_max_rank = 0;
-//    
-//    for (Result result : results) {
-//        total_fips_local_search += result.local_search_fips;
-//        total_fips_max_rank += result.max_rank_fips;
-//    }
-//    
-//    std::cout << "fips are :" << std::endl;
-//    std::cout << "local search = " << total_fips_local_search / amount_of_graphs << std::endl;
-//    std::cout << "max rank = " << total_fips_max_rank / amount_of_graphs << std::endl;
-//
-//    delete mtx;
+    std::vector<std::thread> threads;
+    
+    unsigned long threads_count = std::thread::hardware_concurrency();
+    if (threads_count == 0) {
+        threads_count = 2;
+    }
+    unsigned long amount_of_graphs_per_thread = amount_of_graphs / threads_count;
+
+    std::cout << "Progress: " << std::endl;
+    for (unsigned long i = 0; i < threads_count; i++) {
+        threads.push_back(std::thread(graph_thread, amount_of_graphs_per_thread, &results));
+    }
+    for (auto& th : threads) {
+        th.join();
+    }
+    
+    unsigned long total_fips_local_search = 0;
+    unsigned long total_fips_max_rank = 0;
+    
+    for (Result result : results) {
+        total_fips_local_search += result.local_search_fips;
+        total_fips_max_rank += result.max_rank_fips;
+    }
+    
+    std::cout << "fips are :" << std::endl;
+    std::cout << "local search = " << total_fips_local_search / amount_of_graphs << std::endl;
+    std::cout << "max rank = " << total_fips_max_rank / amount_of_graphs << std::endl;
+
+    delete mtx;
     
     return 0;
 }
