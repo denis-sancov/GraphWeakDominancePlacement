@@ -17,7 +17,10 @@ class Node {
 
 public:
     bool removed;
-    unsigned int value;
+   
+    const unsigned long identifier;
+    const std::string label;
+
     std::vector<edge_ptr_strong> out_edges;
     std::vector<edge_ptr_strong> in_edges;
 
@@ -50,7 +53,7 @@ public:
         }
     }
     
-    Node(unsigned int node_value);
+    Node(unsigned long id, std::string str_label = "");
     void debug();
     
 };

@@ -11,8 +11,15 @@
 #include <random>
 #include <cmath>
 #include <algorithm>
+#include <fstream>
 
 Graph::Graph(unsigned long nodes_count, unsigned short edge_density) {
+   
+    _transitive_closure_matrix = new bool*[nodes_count];
+    for(int i = 0; i < nodes_count; i++) {
+        _transitive_closure_matrix[i] = new bool[nodes_count];
+    }
+    
     _nodes.reserve(nodes_count);
     for (unsigned int i = 0; i < nodes_count; i++) {
         node_ptr_strong node(new Node(i));
@@ -36,7 +43,7 @@ Graph::Graph(unsigned long nodes_count, unsigned short edge_density) {
         if (edges_count < total_count_of_generated_edges) {
             max_range = 1;
         } else {
-            max_range = (edges_count - total_count_of_generated_edges)/9;
+            max_range = (edges_count - total_count_of_generated_edges)/2;
         }
         
         std::uniform_int_distribution<unsigned long> edge_uni(1, max_range + 1);
@@ -61,6 +68,8 @@ Graph::Graph(unsigned long nodes_count, unsigned short edge_density) {
             tmp.push_back(child_index);
             node_ptr_strong node = _nodes[child_index];
             
+
+            
             addEdge(parent_node, node);
         }
         total_count_of_generated_edges += edges_per_node;
@@ -82,6 +91,7 @@ void Graph::addEdge(node_ptr_strong from, node_ptr_strong to) {
     edge_ptr_strong edge(new Edge(from, to));
     from->out_edges.push_back(edge);
     to->in_edges.push_back(edge);
+    _transitive_closure_matrix[from->identifier][to->identifier] = true;
 }
 
 void Graph::resetRemoveMarks() {
@@ -94,9 +104,23 @@ void Graph::resetRemoveMarks() {
 
 void Graph::debug() {
     std::cout << "Graph info" << std::endl;
-    std::cout << "Nodes count = " << _nodes.size() << std::endl;
+    unsigned long nodes_count = _nodes.size();
+    std::cout << "Nodes count = " << nodes_count << std::endl;
     for (node_ptr_strong node : _nodes) {
         node->debug();
     }
+    std::cout << "Transitive closure matrix" << std::endl;
+    for (unsigned long i = 0; i < nodes_count; i++) {
+        for (unsigned long j = 0; j < nodes_count; j++) {
+            std::cout << "From [" << i << "][" << j << "] path = " << _transitive_closure_matrix[i][j] << std::endl;
+        }
+    }
+}
+
+Graph::~Graph() {
+    for (unsigned long i = 0; i < _nodes.size(); i++) {
+        delete[] _transitive_closure_matrix[i];
+    }
+    delete[] _transitive_closure_matrix;
 }
 

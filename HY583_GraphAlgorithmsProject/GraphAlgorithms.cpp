@@ -10,41 +10,27 @@
 #include <stack>
 #include <iostream>
 #include <algorithm>
-#include <unordered_map>
 
 using namespace std;
 
-#pragma mark <BFS to find a path between two nodes>
+#pragma mark - incomparable pairs count
 
-bool _is_there_is_a_path_from(node_ptr_strong from, node_ptr_strong to, Graph &graph) {
-    if (from->value > to->value) {
-        return false;
-    }
-    if (from->value == to->value) {
-        return true;
-    }
-    graph.resetRemoveMarks();
-    
-    stack<node_ptr_strong> nodes_stack;
-    nodes_stack.push(from);
-    while (!nodes_stack.empty()) {
-        node_ptr_strong node = nodes_stack.top();
-        nodes_stack.pop();
-        for (edge_ptr_strong edge : node->out_edges) {
-            node_ptr_strong toNode = edge->to.lock();
-            if (toNode->value == to->value) {
-                return true;
-            }
-            if (edge->removed == false) {
-                edge->removed = true;
-                if (toNode->value < to->value) {
-                    nodes_stack.push(toNode);
-                }
+unsigned long graph_number_of_incomparable_pairs(Graph &graph) {
+    unsigned long e = 0;
+    for (unsigned long i = 0; i < graph.nodes().size()-1; i++) {
+        node_ptr_strong from = graph.nodes()[i];
+        for (unsigned long j = i+1; j < graph.nodes().size(); j++) {
+            node_ptr_strong to = graph.nodes()[j];
+            if (graph.transitiveClosureMatrix()[from->identifier][to->identifier] == true) {
+                e += 1;
             }
         }
     }
-    return false;
+    return graph.nodes().size() * (graph.nodes().size() - 1) / 2 - e;
 }
+
+
+
 
 #pragma mark <Topological sort using Kahn's algorithm>
 
@@ -76,10 +62,10 @@ vector<node_ptr_strong> topological_sort_using_kanhs_algorithm(Graph &graph) {
     }
 
     graph.resetRemoveMarks();
-
+//
 //    cout << "Topological sort using Kahn's algorithm was performed" << endl;
 //    for (node_ptr_weak node : topological_sort) {
-//        cout << node.lock()->value << " ";
+//        cout << node.lock()->label << " ";
 //    }
 //    cout << endl;
     return topological_sort;
@@ -87,24 +73,18 @@ vector<node_ptr_strong> topological_sort_using_kanhs_algorithm(Graph &graph) {
 
 #pragma mark <Topological sort using local search>
 
-typedef unordered_multimap<node_ptr_strong, node_ptr_strong> FipsMultimap;
 
 bool _perform_swipe(unsigned long from, unsigned long to,
                     std::vector<node_ptr_strong> &topological_sort,
-                    FipsMultimap &fipsMultimap) {
-    
+                    bool **fipsMatrix) {
     node_ptr_strong fromNode = topological_sort.at(from);
     node_ptr_strong toNode = topological_sort.at(to);
     
-    pair<FipsMultimap::iterator, FipsMultimap::iterator> iterpair = fipsMultimap.equal_range(fromNode);
     
-    FipsMultimap::iterator it = iterpair.first;
-    for (; it != iterpair.second; ++it) {
-        if (it->second->value == toNode->value) {
-            fipsMultimap.erase(it);
-            iter_swap(topological_sort.begin() + (long)from, topological_sort.begin() + (long)to);
-            return true;
-        }
+    if (fipsMatrix[fromNode->identifier][toNode->identifier] == true) {
+        fipsMatrix[fromNode->identifier][toNode->identifier] = false;
+        iter_swap(topological_sort.begin() + (long)from, topological_sort.begin() + (long)to);
+        return true;
     }
     return false;
 }
@@ -113,15 +93,17 @@ std::vector<node_ptr_strong> topological_sort_using_local_search(Graph &graph, v
     vector<node_ptr_strong> topological_sort(t1);
     unsigned long size = t1.size();
     
-    FipsMultimap fipsMultimap;
+    bool **_fipsMatrix = new bool*[size];
+    for(int i = 0; i < size; i++) {
+        _fipsMatrix[i] = new bool[size];
+    }
+    
     
     for (unsigned long i = 0; i < size - 1; i++) {
-        for (unsigned long j = i + 1; j < size; j++) {
+        for (unsigned long j = i; j < size; j++) {
             node_ptr_strong from = t1.at(i);
             node_ptr_strong to = t1.at(j);
-            if (_is_there_is_a_path_from(from, to, graph) == false && i < j) {
-                fipsMultimap.insert(pair<node_ptr_strong, node_ptr_strong>(from, to));
-            }
+            _fipsMatrix[from->identifier][to->identifier] = !graph.transitiveClosureMatrix()[from->identifier][to->identifier];
         }
     }
 
@@ -131,23 +113,26 @@ std::vector<node_ptr_strong> topological_sort_using_local_search(Graph &graph, v
         swipe_available = false;
 
         for (unsigned long i = 0; i < size-1; i++) {
-            if (_perform_swipe(i, i+1, topological_sort, fipsMultimap)) {
+            if (_perform_swipe(i, i+1, topological_sort, _fipsMatrix)) {
                 swipe_available = true;
             }
         }
-    
+        
         for (unsigned long i = size-1; i > 0; i--) {
-            if (_perform_swipe(i, i-1, topological_sort, fipsMultimap)) {
+            if (_perform_swipe(i-1, i, topological_sort, _fipsMatrix)) {
                 swipe_available = true;
             }
         }
     }
     
-    fipsMultimap.clear();
-    
+    for (unsigned long i = 0; i < size; i++) {
+        delete[] _fipsMatrix[i];
+    }
+    delete[] _fipsMatrix;
+//    
 //    cout << "Topological sort using Local search approach was performed" << endl;
 //    for (node_ptr_strong node : topological_sort) {
-//        cout << node->value << " ";
+//        cout << node->label << " ";
 //    }
 //    cout << endl;
     return topological_sort;
@@ -186,13 +171,12 @@ std::vector<node_ptr_strong> topological_sort_using_max_rank(Graph &graph, std::
         topological_sort.push_back(node);
     }
     graph.resetRemoveMarks();
-    
+//    
 //    cout << "Topological sort using Max rank" << endl;
 //    for (node_ptr_strong node : topological_sort) {
-//        cout << node->value << " ";
+//        cout << node->label << " ";
 //    }
 //    cout << endl;
-
     
     return topological_sort;
 }
@@ -227,11 +211,14 @@ unsigned long topological_sort_number_of_fips(Graph &graph, std::vector<node_ptr
             long j_in_t2 = find(t2.begin(), t2.end(), t1.at(j)) - t2.begin();
             
             if (i <= j && i_in_t2 <= j_in_t2) {
-                if (_is_there_is_a_path_from(t1.at(i), t1.at(j), graph) == false) {
+                node_ptr_strong from = t1.at(i);
+                node_ptr_strong to = t1.at(j);
+                if (graph.transitiveClosureMatrix()[from->identifier][to->identifier] == false) {
                     number_of_fips += 1;
                 }
             }
         }
-    }    
+    }
+   // std::cout << "fips count = " << number_of_fips << std::endl;
     return number_of_fips;
 }

@@ -12,6 +12,8 @@
 #include "Graph.hpp"
 #include <vector>
 
+unsigned long graph_number_of_incomparable_pairs(Graph &graph);
+
 std::vector<node_ptr_strong> topological_sort_using_kanhs_algorithm(Graph &graph);
 
 std::vector<node_ptr_strong> topological_sort_using_local_search(Graph &graph, std::vector<node_ptr_strong> &t1);

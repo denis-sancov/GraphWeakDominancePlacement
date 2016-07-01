@@ -15,11 +15,16 @@
 
 class Graph {
     std::vector<node_ptr_strong> _nodes;
-public:    
+    bool **_transitive_closure_matrix;
+public:
+    
     Graph(unsigned long nodes_count, unsigned short edge_density);
-        
+    ~Graph();
     const std::vector<node_ptr_strong> nodes() {
         return _nodes;
+    }
+    const bool** transitiveClosureMatrix() {
+        return (const bool**)_transitive_closure_matrix;
     }
     
     void addEdge(node_ptr_strong from, node_ptr_strong to);
