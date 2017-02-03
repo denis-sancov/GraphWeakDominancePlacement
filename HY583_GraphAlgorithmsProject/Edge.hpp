@@ -9,14 +9,22 @@
 #ifndef Edge_hpp
 #define Edge_hpp
 
-#include "defines.h"
-
-class Edge {
+namespace csd {
+   
+    class Node;
     
-public:
-    node_ptr_weak from, to;
-    bool removed;
-    Edge(node_ptr_strong from_node, node_ptr_strong to_node);
-};
-
+    class Edge {
+    public:
+        Edge(Node *const from, Node *const to);
+        
+        bool isRemoved() const;
+        void setRemoved(bool removed);
+        
+        Node *from() const;
+        Node *to() const;
+    private:
+        Node *const _from, *const _to;
+        bool _removed = false;
+    };
+}
 #endif /* Edge_hpp */

@@ -12,28 +12,31 @@
 #include <vector>
 #include "Node.hpp"
 
+namespace csd {
 
-class Graph {
-    std::vector<node_ptr_strong> _nodes;
-    bool **_transitive_closure_matrix;
-public:
-    
-    Graph(unsigned long nodes_count, unsigned short edge_density);
-    ~Graph();
-    const std::vector<node_ptr_strong> nodes() {
-        return _nodes;
-    }
-    const bool** transitiveClosureMatrix() {
-        return (const bool**)_transitive_closure_matrix;
-    }
-    
-    void addEdge(node_ptr_strong from, node_ptr_strong to);
-    
-    void markNodeAsRemoved(node_ptr_strong node);
-    
-    void resetRemoveMarks();
-    
-    void debug();
- };
+    class Graph {
+    public:
+        Graph();
+        Graph(unsigned long nodesCount, double edge_density);
+        ~Graph();
+        
+        unsigned long getNodesCount() const;
+        
+        std::vector<Node *> zeroInNodes() const;
+        std::vector<Node *> getNodes() const;
 
+        bool hasPath(Node *from, Node *to) const;
+        
+        void resetRemoveMarks() const;
+    private:
+        std::vector<Node *> _nodes;
+        bool **_transitive_closure_matrix;
+        
+        void prepareTransitiveClosureMatrix();
+        
+        void addEdge(Node *from, Node *to);
+        
+        friend std::ostream& operator<<(std::ostream&, const Graph&);
+    };
+}
 #endif /* Graph_hpp */

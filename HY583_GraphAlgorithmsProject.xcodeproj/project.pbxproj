@@ -11,7 +11,6 @@
 		D795DBFB1CE361960008AB86 /* Edge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D795DBF91CE361960008AB86 /* Edge.cpp */; };
 		D7F286281CD1B22600BC237C /* Graph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7F286261CD1B22600BC237C /* Graph.cpp */; };
 		D7F2862E1CD1B2AD00BC237C /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7F2862C1CD1B2AD00BC237C /* Node.cpp */; };
-		D7F286311CD1B38B00BC237C /* GraphAlgorithms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7F2862F1CD1B38B00BC237C /* GraphAlgorithms.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,7 +26,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D72791751D14253B00C019D2 /* defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = defines.h; sourceTree = "<group>"; };
 		D795DBF91CE361960008AB86 /* Edge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Edge.cpp; sourceTree = "<group>"; };
 		D795DBFA1CE361960008AB86 /* Edge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Edge.hpp; sourceTree = "<group>"; };
 		D7F2861B1CD1B21900BC237C /* HY583_GraphAlgorithmsProject */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HY583_GraphAlgorithmsProject; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -36,7 +34,6 @@
 		D7F286271CD1B22600BC237C /* Graph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Graph.hpp; sourceTree = "<group>"; };
 		D7F2862C1CD1B2AD00BC237C /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
 		D7F2862D1CD1B2AD00BC237C /* Node.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Node.hpp; sourceTree = "<group>"; };
-		D7F2862F1CD1B38B00BC237C /* GraphAlgorithms.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphAlgorithms.cpp; sourceTree = "<group>"; };
 		D7F286301CD1B38B00BC237C /* GraphAlgorithms.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GraphAlgorithms.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -71,7 +68,6 @@
 			isa = PBXGroup;
 			children = (
 				D7F286301CD1B38B00BC237C /* GraphAlgorithms.hpp */,
-				D7F2862F1CD1B38B00BC237C /* GraphAlgorithms.cpp */,
 				D7F286251CD1B21C00BC237C /* Graph */,
 				D7F2861E1CD1B21900BC237C /* main.cpp */,
 			);
@@ -81,7 +77,6 @@
 		D7F286251CD1B21C00BC237C /* Graph */ = {
 			isa = PBXGroup;
 			children = (
-				D72791751D14253B00C019D2 /* defines.h */,
 				D7F286271CD1B22600BC237C /* Graph.hpp */,
 				D7F286261CD1B22600BC237C /* Graph.cpp */,
 				D7F2862D1CD1B2AD00BC237C /* Node.hpp */,
@@ -118,7 +113,7 @@
 		D7F286131CD1B21900BC237C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "University of Crete";
 				TargetAttributes = {
 					D7F2861A1CD1B21900BC237C = {
@@ -149,7 +144,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D795DBFB1CE361960008AB86 /* Edge.cpp in Sources */,
-				D7F286311CD1B38B00BC237C /* GraphAlgorithms.cpp in Sources */,
 				D7F286281CD1B22600BC237C /* Graph.cpp in Sources */,
 				D732B8721D13F8780082C069 /* main.cpp in Sources */,
 				D7F2862E1CD1B2AD00BC237C /* Node.cpp in Sources */,
@@ -173,8 +167,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -217,8 +213,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -257,8 +255,10 @@
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_SHADOW = YES;
+				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -279,8 +279,10 @@
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_SHADOW = YES;
+				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};

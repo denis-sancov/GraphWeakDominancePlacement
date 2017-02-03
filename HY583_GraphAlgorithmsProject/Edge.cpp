@@ -7,10 +7,24 @@
 //
 
 #include "Edge.hpp"
-#include "Node.hpp"
+#include <iostream>
 
-Edge::Edge(node_ptr_strong from_node, node_ptr_strong to_node) {
-    this->removed = false;
-    this->from = from_node;
-    this->to = to_node;
+using namespace csd;
+
+Edge::Edge(Node *const from, Node *const to):_from(from), _to(to) { }
+
+Node *Edge::from() const {
+    return _from;
+}
+
+Node *Edge::to() const {
+    return _to;
+}
+
+bool Edge::isRemoved() const {
+    return _removed;
+}
+
+void Edge::setRemoved(bool removed) {
+    _removed = removed;
 }

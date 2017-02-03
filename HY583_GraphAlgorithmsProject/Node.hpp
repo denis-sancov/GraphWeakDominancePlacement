@@ -9,52 +9,41 @@
 #ifndef Node_hpp
 #define Node_hpp
 
-#include <string>
 #include <vector>
+#include <string>
 #include "Edge.hpp"
 
-class Node {
+namespace csd {
+    class Node {
+    public:
+        Node(unsigned long id);
+        Node(unsigned long id, std::string const &label);
+        ~Node();
+        
+        unsigned long getID() const;
+        std::string getLabel() const;
 
-public:
-    bool removed;
-   
-    const unsigned long identifier;
-    const std::string label;
+        bool isRemoved() const;
+        void markAsRemoved(bool removed);
+        
+        
+        unsigned long getInDegree() const;
+        unsigned long getOutDegree() const;
 
-    std::vector<edge_ptr_strong> out_edges;
-    std::vector<edge_ptr_strong> in_edges;
+        std::vector<Edge *> getOutEdges() const;
+        std::vector<Edge *> getInEdges() const;
 
-    unsigned long in_degree() {
-        unsigned long tmp = 0;
-        for (edge_ptr_strong edge : in_edges) {
-            if (edge->removed == false) {
-                tmp += 1;
-            }
-        }
-        return tmp;
-    }
-    
-    unsigned long out_degree() {
-        unsigned long tmp = 0;
-        for (edge_ptr_strong edge : out_edges) {
-            if (edge->removed == false) {
-                tmp += 1;
-            }
-        }
-        return tmp;
-    }
+        void addEdgeTo(Node *to);
+    private:
+        const unsigned long _id;
+        const std::string _label;
 
-    void resetRemovedMarks() {
-        for (edge_ptr_strong edge : in_edges) {
-            edge->removed = false;
-        }
-        for (edge_ptr_strong edge : out_edges) {
-            edge->removed = false;
-        }
-    }
-    
-    Node(unsigned long id, std::string str_label = "");
-    void debug();
-    
-};
+        bool _removed = false;
+       
+        std::vector<Edge *> _outEdges;
+        std::vector<Edge *> _inEdges;
+
+        friend std::ostream& operator<<(std::ostream&, const Node&);
+    };
+}
 #endif /* Node_hpp */
